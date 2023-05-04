@@ -5,7 +5,8 @@ const fileData = { hasOld: Boolean, oldPath: String, hasNew: Boolean, newPath: S
 module.exports = { arguments: arguments, file: fileData };
 
 arguments.forEach(_utils.checkArgs)
-console.log(fileData)
+console.log('fileData',fileData)
+console.log('args',arguments);
 /* arguments.forEach(arg => {
   const checkOld = (arg.startsWith('--file=') && arg.length > 7)
   const checkNew = (arg.startsWith('--new-file=') && arg.length > 11)

@@ -1,5 +1,7 @@
 *
 !.gitignore
+!_main.js
+!_variables.js
 !_utilities.js
 !_vueCompile.js
 !my-arguments.js
