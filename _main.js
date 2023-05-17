@@ -10,12 +10,14 @@ if (arguments.length == 0 || arguments.length < 2) {
 } else {
     arguments.forEach(arg => {utilities.checkArgs(arg)})
     if (utilities.validateArgs()) {
+        console.log(1);
         // console.log(1,'\n',data.fileInfo)
-        // utilities.readFile()
-        // tags = compiler.getVueTags(data.readedFile)
-        // newFile = String(compiler.format_vue_to_js(tags))
-        // utilities.writeFile(newFile)
+        utilities.readFile()
+        tags = compiler.getVueTags(data.readedFile)
+        newFile = String(compiler.format_vue_to_js(tags))
+        utilities.writeFile(newFile)
     } else {
+        console.log(2);
         // console.log(2,'\n',data.fileInfo);
     }
 }

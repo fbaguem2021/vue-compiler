@@ -20,56 +20,39 @@ module.exports = {
     },
     checkArgs(arg) {
         const fi = data.fileInfo,
-            // checkOld  = (arg.startsWith('--source=') && arg.length > 9),
-            // checkType = (arg.startsWith('--type=') && arg.length > 7),
-            // checkNew  = (arg.startsWith('--new-file=') && arg.length > 11),
-            // override  = (arg.startsWith('--override=') && arg.length == 15),
+            checkOld  = (arg.startsWith('--source=') && arg.length > 9),
+            checkType = (arg.startsWith('--type=') && arg.length > 7),
+            checkNew  = (arg.startsWith('--new-file=') && arg.length > 11),
+            override  = (arg.startsWith('--override=') && arg.length == 15),
             checkNewExtensions = (arg.toLowerCase().endsWith('.vue') || arg.toLowerCase().endsWith('.js'))
         
-        data.fileInfo.hasOld      = (arg.startsWith('--source=') && arg.length > 9)
-        data.fileInfo.hasType     = (arg.startsWith('--type=') && arg.length > 7)
-        data.fileInfo.hasNew      = (arg.startsWith('--new-file=') && arg.length > 11)
-        data.fileInfo.hasOverride = (arg.startsWith('--override=') && arg.length == 15)
-        
-        if (data.fileInfo.hasOld) {
-            console.log(1,arg);
-            // data.fileInfo.hasOld = true
+        if (checkOld) {
+            data.fileInfo.hasOld = true
             data.fileInfo.oldPath = arg.split('=')[1]
             data.fileInfo.oldExists = fs.existsSync(arg.split('=')[1])
-            let hasOld = fi.hasOld, oldPath = fi.oldPath, oldExists = fi.oldExists
-            // console.log('old',{hasOld, oldPath, oldExists})
         }
         // else { data.fileInfo.hasOld = false }
 
-        if ( data.fileInfo.hasType ) {
-            console.log(2,arg);
+        if ( checkType ) {
             data.fileInfo.hasType = true
             data.fileInfo.fileType = arg.split('=')[1]
-            let hasType = fi.hasType, fileType = fi.fileType
-            // console.log('type', {hasType, fileType})
         }
         // else { data.fileInfo.hasType = false }
         
-        if ( data.fileInfo.hasNew ) {
-            console.log(3,arg);
+        if ( checkNew ) {
             data.fileInfo.hasNew = true
             data.fileInfo.newPath = arg.split('=')[1]
             data.fileInfo.newExists = fs.existsSync(arg.split('=')[1])
-            let hasNew = fi.hasNew, newPath = fi.newPath, newExists = fi.newExists
-            // console.log('new',{hasNew, newPath, newExists})
         }
         // else { data.fileInfo.hasNew = false }
 
-        if ( data.fileInfo.hasOverride ) {
-            console.log(4,arg);
+        if ( override ) {
             data.fileInfo.hasOverride = true
             data.fileInfo.override = (arg.split('=')[1] === 'true')
-            let hasOverride = fi.hasOverride, override = fi.override
-            // console.log('override',{hasOverride, override})
         }
         // else { data.fileInfo.hasOverride = false }
         
-        console.log(arg,'\n',data.fileInfo);
+        // console.log(arg,'\n',data.fileInfo);
     },
     readFile(async=false) {
         const file_name = data.fileInfo.oldPath
@@ -83,11 +66,6 @@ module.exports = {
         }
     },
     writeFile(file_content, async=false) {
-        // const fileData = { 
-        //     fileType: String, override: Boolean,
-        //     hasOld: Boolean, oldPath: String, oldExists: Boolean,
-        //     hasNew: Boolean, newPath: String, newExists: Boolean
-        // }
         const file_name=data.fileInfo.newPath, 
             showMessage=function(){ console.log('File created successfully!') }
         try {
@@ -101,14 +79,14 @@ module.exports = {
                 showMessage()
             }
         } catch (e) {
-            console.error(e)
+            console.log(e)
         }
     },
     validateArgs() {
         let error=Boolean, errorCode=Number
         error = false; errorCode= -1
         const fi = data.fileInfo, 
-            showMessage = (e)=>{ console.error[e[0], e[1]] },
+            showMessage = (e) => console.error(e[0], e[1]),
             messages = [
             ["ERROR","No '--source file' was passed"],["ERROR","The '--source' file doesn't exists"],
             ["ERROR","No '--new-file' was passed"],["ERROR","The '--new-file' exists but no '--overide' option was passed"]
@@ -122,7 +100,7 @@ module.exports = {
         if (!fi.hasNew) { 
             error=true; errorCode=2
         }
-        if (fi.newExists && fi.override === 'false') {
+        if ( (fi.newExists && !fi.hasOverride) || (fi.newExists && fi.override === 'false') ) {
             error=true; errorCode=3
         }
         if (error) showMessage(messages[errorCode])

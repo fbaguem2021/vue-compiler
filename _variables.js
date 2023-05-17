@@ -4,7 +4,7 @@ const fileData = {
     hasOld: Boolean, oldPath: String, oldExists: Boolean,
     hasNew: Boolean, newPath: String, newExists: Boolean
 }
-fileData.hasOld=false; fileData.hasType=false; fileData.hasNew=false; fileData.hasOverride=false
+fileData.hasOld=false; fileData.hasType=false; fileData.hasNew=false; fileData.hasOverride=false;
 module.exports = { 
     arguments: arguments, 
     fileInfo: fileData,
